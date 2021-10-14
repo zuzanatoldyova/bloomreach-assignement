@@ -1,0 +1,12 @@
+<div>
+  <div>
+    <span>{{ order + 1 }}. step </span>
+    <span class="">{{ selectedEvent.eventName }}</span>
+  </div>
+  <select name="events" 
+    [id]="selectedEvent.index" 
+    [(ngModel)]="selectedEvent"
+    (change)="select()">
+    <option *ngFor="let event of allEvents" [ngValue]="event">{{ event.eventName }}</option>
+  </select>
+</div>

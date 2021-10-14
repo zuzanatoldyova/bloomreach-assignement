@@ -1,0 +1,6 @@
+<div *ngFor="let event of selectedEvents; let i = index">
+  <app-funnel-step [selectedEvent]="event" 
+      [allEvents]="distinctEvents1" 
+      [order]="i"
+      (selected)="onSelected($event, i)"></app-funnel-step>
+</div>
