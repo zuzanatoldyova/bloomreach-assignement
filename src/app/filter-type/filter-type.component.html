@@ -1,0 +1,24 @@
+<select name="filter"
+  [(ngModel)]="filter"
+  (change)="filterSelected.emit(filter)">
+  <option *ngFor="let option of filterOptions" 
+  [ngValue]="option">{{ option.name }}
+  </option>
+</select>
+<input *ngIf="filter && filter.params === 1" 
+  type="text" 
+  value="0"
+  [(ngModel)]="filter.value[0]"
+  (input)="filterSelected.emit(filter)">
+<p style="display: inline-block" 
+  *ngIf="filter && filter.params === 2">
+  <input type="text" 
+    value="0" 
+    [(ngModel)]="filter.value[0]"
+    (input)="filterSelected.emit(filter)"/>
+  <span> and </span>
+  <input type="text" 
+    value="0" 
+    [(ngModel)]="filter.value[1]"
+    (input)="filterSelected.emit(filter)"/>
+</p>

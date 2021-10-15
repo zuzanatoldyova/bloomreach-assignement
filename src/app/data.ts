@@ -12,6 +12,8 @@ export interface EventType {
   number_of_items?: number
 }
 
+export type EventAttribute = 'timestamp' | 'index' | 'price' | 'number_of_items';
+
 export const events: CustomEvent [] = [ 
   {
     "user_id": 5,
@@ -59,9 +61,7 @@ export const events: CustomEvent [] = [
     "event": {
       "eventName": "C1",
       "timestamp": 1634293040,
-      "index": 5,
-      "price": 120,
-      "number_of_items": 3
+      "index": 5
     }
   },{
     "user_id": 5,
@@ -89,9 +89,7 @@ export const events: CustomEvent [] = [
     "event": {
       "eventName": "C1",
       "timestamp": 1633947440,
-      "index": 8,
-      "price": 25,
-      "number_of_items": 1
+      "index": 8
     }
   }
 ]

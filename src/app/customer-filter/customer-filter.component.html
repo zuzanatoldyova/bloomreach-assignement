@@ -1,6 +1,8 @@
 <div *ngFor="let event of selectedEvents; let i = index">
   <app-funnel-step [selectedEvent]="event" 
-      [allEvents]="distinctEvents1" 
+      [allEvents]="distinctEvents" 
       [order]="i"
-      (selected)="onSelected($event, i)"></app-funnel-step>
+      (selected)="onSelected($event, i)"
+      (filterAdded)="addFilter($event, i)"></app-funnel-step>
 </div>
+<button (click)="filterEvents()">Apply filters</button>
