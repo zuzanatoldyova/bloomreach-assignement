@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { events, EventType } from '../data';
+import { events, EventType, CustomEvent, CustomerSessionEvents } from '../data';
 import { EventAttributeFilter } from '../funnel-step/funnel-step.component'
 @Component({
   selector: 'app-customer-filter',
@@ -13,15 +13,23 @@ export class CustomerFilterComponent implements OnInit {
   });
   selectedEvents: EventType[] = [];
   filters: EventAttributeFilter[] = [];
+  customerSessionEvents:CustomerSessionEvents[] = [];
 
   constructor() { }
 
   ngOnInit(): void {
+    this.addBasicEvent();
+    this.groupCustomerSessionEvents(events);
+  }
+
+  addBasicEvent() {
     this.addEvent(this.events[0].event);
   }
 
   onSelected(event: EventType, index: number) {
     this.selectedEvents[index] = event;
+    let basicFilter = this.createBasicFilter(event.eventName);
+    this.addFilter(basicFilter, index);
   }
 
   addEvent(event: EventType) {
@@ -51,20 +59,50 @@ export class CustomerFilterComponent implements OnInit {
     }
   }
 
-  filterEvents() {
-    let filter = this.filters[0];
-    let filtered = this.events.filter(event => {
-      return event.event.eventName === filter.eventName
-    }).filter(event => {
-      if (filter.attribute) {
-        let attrValue = filter.attribute && event.event[filter.attribute];
-        let [x, y] = filter.value;
-        // evaluate math expression on event attribute based on selected values
-        return eval(filter.math);
-      } 
-      return true;
+  filterEvents(events: EventType[]) {
+    let filtered = events;
+    let foundEventCounts = this.filters.map(filter => {
+      return filtered.filter(event => {
+        return event.eventName === filter.eventName
+      }).filter(event => {
+        if (filter.attribute) {
+          let attrValue = filter.attribute && event[filter.attribute];
+          let [x, y] = filter.value;
+          // evaluate math expression on event attribute based on selected values
+          return eval(filter.math);
+        } 
+        return true;
+      }).length;
     });
-    // print out filtered events
-    console.log(filtered);
+    return foundEventCounts.every(count => count > 0);
+  }
+
+  groupCustomerSessionEvents(events: CustomEvent[]) {
+    events.forEach(event => {
+      const customerSession = this.customerSessionEvents
+        .filter(e => e.user_id === event.user_id 
+          && e.session_id === event.session_id);
+      if (customerSession.length) {
+        customerSession[0].events.push(event.event)
+      } else {
+        this.customerSessionEvents.push({
+          'user_id': event.user_id,
+          'session_id': event.session_id,
+          'events': [event.event]
+        })
+      }
+    })
+    console.log(this.customerSessionEvents);
+  }
+
+  /**
+   * Print out filtered customer sessions that contain events based on selected filters.
+   */
+  filterCustomers() {
+    let filteredCustomers = this.customerSessionEvents.filter(customerSession => {
+      return this.filterEvents(customerSession.events);
+    });
+
+    console.log(filteredCustomers);
   }
 }
