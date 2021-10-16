@@ -1,11 +1,14 @@
-<div class="funnelContainer">
-  <div *ngFor="let event of selectedEvents; let i = index">
-    <app-funnel-step [selectedEvent]="event" 
-        [allEvents]="distinctEvents" 
-        [order]="i"
-        (selected)="onSelected($event, i)"
-        (filterAdded)="addFilter($event, i)"></app-funnel-step>
+<div style="padding: 20px;">
+  <p class="uppercase">Customer filter</p>
+  <div class="funnelContainer">
+    <div *ngFor="let event of selectedEvents; let i = index">
+      <app-funnel-step [selectedEvent]="event" 
+          [allEvents]="distinctEvents" 
+          [order]="i"
+          (selected)="onSelected($event, i)"
+          (filterAdded)="addFilter($event, i)"></app-funnel-step>
+    </div>
+    <button class="uppercase center buttonLink" (click)="addBasicEvent()">Add funnel step</button>
   </div>
-  <button (click)="addBasicEvent()">Add funnel step</button>
+  <button class="yellow" (click)="filterCustomers()">Apply filters</button>
 </div>
-<button (click)="filterCustomers()">Apply filters</button>

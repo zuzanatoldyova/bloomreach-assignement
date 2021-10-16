@@ -1,0 +1,14 @@
+@import '../../assets/style/variables';
+
+.funnelContainer {
+  border: solid 1px $blue;
+  background-color: white;
+  padding: 20px;
+}
+
+button.yellow {
+  background-color: $yellow;
+  border: none;
+  height: 30px;
+  margin-top: 20px;
+}

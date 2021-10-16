@@ -1,1 +1,80 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'assets/style/variables';
+
+html, body {
+  font: Arial, sans-serif;
+  background-color: $grey;
+  line-height: 1.5em;;
+}
+
+p {
+  margin: 0;
+}
+
+select {
+  /* reset */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+select, .input {
+  line-height: 1.5em;
+  position: relative;
+  -webkit-appearance: none;
+  padding: 0.5em 3.5em 0.5em 1em;
+  border: 1px solid #E8EAED;
+  border-radius: 4px;
+  background: white;
+  box-shadow: 0 1px 3px -2px #9098A9;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  margin: 0 10px 0 0;
+
+  &.arrow {
+    background-image:
+      linear-gradient(45deg, transparent 50%, gray 50%),
+      linear-gradient(135deg, gray 50%, transparent 50%),
+      linear-gradient(to right, #ccc, #ccc);
+    background-position:
+      calc(100% - 20px) calc(1em + 2px),
+      calc(100% - 15px) calc(1em + 2px),
+      calc(100% - 2.5em) 0.5em;
+    background-size:
+      5px 5px,
+      5px 5px,
+      1px 1.5em;
+    background-repeat: no-repeat;
+  }
+}
+
+input.input {
+  max-width: 80px;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
+.row {
+  margin: 1em 0;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.center {
+  display: block;
+  margin: auto;
+}
+
+.buttonLink {
+  border:none;
+  background-color:transparent;
+  outline:none;
+  color: $blue;
+} 

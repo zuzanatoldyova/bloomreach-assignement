@@ -17,7 +17,13 @@ export class FilterTypeComponent implements OnInit {
   @Output() filterSelected = new EventEmitter();
 
   filterOptions: Filter[] = [
-    { 'name': 'equal to',
+    {
+      'name': 'Unnamed',
+      'math': '',
+      'params': 0,
+      'value': []
+    }, { 
+      'name': 'equal to',
       'math': 'attrValue=x',
       'params': 1,
       'value': [0]
@@ -40,6 +46,7 @@ export class FilterTypeComponent implements OnInit {
   ]
 
   constructor() { 
+    this.filter = this.filterOptions[0];
   }
 
   ngOnInit(): void {

@@ -1,20 +1,24 @@
 <div>
   <div>
-    <span>{{ order + 1 }}. step </span>
+    <span class="step">{{ order + 1 }}. step </span>
     <span class="">{{ selectedEvent.eventName }}</span>
   </div>
-  <select name="events" 
-    [id]="selectedEvent.index" 
-    [(ngModel)]="selectedEvent"
-    (change)="select()">
-    <option *ngFor="let event of allEvents" [ngValue]="event">{{ event.eventName }}</option>
-  </select>
-  <button *ngIf="!showAttribute" (click)="showAttribute = true">Add event attribute</button>
-  <select *ngIf="showAttribute" name="attributes"
-    [(ngModel)]="selectedAttribute">
-    <option value="" selected disabled hidden>Unnamed</option>
-    <option *ngFor="let key of selectedEventKeys" [value]="key">{{ key }}
-      </option>
-  </select>
-  <app-filter-type *ngIf="selectedAttribute" (filterSelected)="addFilter($event)"></app-filter-type>
+  <div class="row">
+    <select class="arrow" 
+      name="events" 
+      [id]="selectedEvent.index" 
+      [(ngModel)]="selectedEvent"
+      (change)="select()">
+      <option *ngFor="let event of allEvents" [ngValue]="event">{{ event.eventName }}</option>
+    </select>
+    <button class="buttonLink" *ngIf="!showAttribute" (click)="showAttribute = true">Add event attribute</button>
+    <select class="arrow"
+      *ngIf="showAttribute" name="attributes"
+      [(ngModel)]="selectedAttribute">
+      <option value="" selected disabled hidden>Unnamed</option>
+      <option *ngFor="let key of selectedEventKeys" [value]="key">{{ key }}
+        </option>
+    </select>
+    <app-filter-type *ngIf="selectedAttribute" (filterSelected)="addFilter($event)"></app-filter-type>
+  </div>
 </div>

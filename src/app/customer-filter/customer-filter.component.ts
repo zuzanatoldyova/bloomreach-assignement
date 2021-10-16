@@ -92,7 +92,6 @@ export class CustomerFilterComponent implements OnInit {
         })
       }
     })
-    console.log(this.customerSessionEvents);
   }
 
   /**
