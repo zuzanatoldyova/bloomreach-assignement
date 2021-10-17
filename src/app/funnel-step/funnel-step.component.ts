@@ -1,11 +1,11 @@
-import { Component, OnInit, OnChanges, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { EventType, EventAttribute } from '../data';
 import { Filter } from '../filter-type/filter-type.component'
 
 export interface EventAttributeFilter {
-  name?: string,
+  name: string,
   math: string,
-  params?: number,
+  params: number,
   value: number[],
   attribute?: EventAttribute,
   eventName: string
@@ -15,16 +15,16 @@ export interface EventAttributeFilter {
   templateUrl: './funnel-step.component.html',
   styleUrls: ['./funnel-step.component.scss']
 })
-export class FunnelStepComponent implements OnInit, OnChanges {
+export class FunnelStepComponent implements OnInit {
   @Input() selectedEvent!: string;
   @Input() allEvents!: EventType[];
   @Input() order!: number;
+  @Input() defaultFilter?: EventAttributeFilter;
   @Output() selected = new EventEmitter();
   @Output() filterAdded = new EventEmitter();
   
   showFilter: Boolean = false;
   selectedEventKeys: string[] = [];
-  selectedAttribute?: EventAttribute;
   filter?: EventAttributeFilter;
   allEventNames?: string[]; 
 
@@ -33,12 +33,8 @@ export class FunnelStepComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.allEventNames = this.allEvents.map(event => event.eventName);
     this.selectedEventKeys = this.getKeys(this.selectedEvent);
-  }
-
-  ngOnChanges(changes: SimpleChanges){
-    let newKeys = this.getKeys(this.selectedEvent);
-    if (this.selectedAttribute && !newKeys.includes(this.selectedAttribute)) {
-      this.selectedAttribute = undefined;
+    if (this.defaultFilter && this.defaultFilter.attribute) {
+      this.showFilter = true;
     }
   }
 
@@ -62,7 +58,6 @@ export class FunnelStepComponent implements OnInit, OnChanges {
 
   removeFilter() {
     this.showFilter = false;
-    this.selectedAttribute = undefined;
     this.filterAdded.emit({
       'eventName': this.selectedEvent, 
       'name': '',
@@ -77,11 +72,8 @@ export class FunnelStepComponent implements OnInit, OnChanges {
    * @param filter 
    */
   createFilter(filter: Filter) {
-    if (this.selectedAttribute) {
       this.filter = {...filter, 
-      'eventName': this.selectedEvent, 
-      'attribute': this.selectedAttribute}
+      'eventName': this.selectedEvent}
     this.filterAdded.emit(this.filter);
-    }  
   }
 }

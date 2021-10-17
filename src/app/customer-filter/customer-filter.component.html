@@ -5,11 +5,15 @@
       class="flex">
       <app-funnel-step [id]="event.idCounter"
           [selectedEvent]="event.eventName" 
+          [defaultFilter]="event.filter"
           [allEvents]="distinctEvents" 
           [order]="i"
           (selected)="addEvent($event, i)"
           (filterAdded)="addFilter($event, i)"></app-funnel-step>
-      <i *ngIf="i > 0" class="remove far fa-trash-alt" (click)="removeEvent(i)"></i>
+      <span>
+        <i class="icon far fa-clone" (click)="copyEventFilter(event.eventName, i)"></i>
+        <i *ngIf="i > 0" class="icon far fa-trash-alt" (click)="removeEvent(i)"></i>
+      </span>
     </div>
     <button class="uppercase center buttonLink" (click)="addNewEvent()">Add funnel step</button>
   </div>

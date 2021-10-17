@@ -1,10 +1,11 @@
-import { Component, OnInit, EventEmitter, Output  } from '@angular/core';
-
+import { Component, OnInit, EventEmitter, Output, Input  } from '@angular/core';
+import { EventAttribute } from '../data';
 export interface Filter {
   name: string,
   math: string,
   params: number,
-  value: number[]
+  value: number[],
+  attribute?: EventAttribute
 }
 
 @Component({
@@ -13,8 +14,11 @@ export interface Filter {
   styleUrls: ['./filter-type.component.scss']
 })
 export class FilterTypeComponent implements OnInit {
-  filter?: Filter;
+  @Input() eventKeys: string[] = [];
+  @Input() defaultFilter?: Filter;
   @Output() filterSelected = new EventEmitter();
+  filter: Filter;
+  selectedAttribute?: EventAttribute;
 
   filterOptions: Filter[] = [
     {
@@ -46,14 +50,29 @@ export class FilterTypeComponent implements OnInit {
   ]
 
   constructor() { 
-    this.filter = this.filterOptions[0];
+    this.filter = Object.assign({}, this.filterOptions[0]);
   }
 
   ngOnInit(): void {
-  
+    if (this.defaultFilter) {
+      this.filter = Object.assign({}, this.defaultFilter);
+      this.selectedAttribute = this.defaultFilter.attribute;
+    }
+  }
+  /**
+   * Emit filter selected event with current filter.
+   */
+  setFilter() {
+    this.filterSelected.emit({...this.filter, attribute: this.selectedAttribute})
   }
 
-  setFilter(operation: Filter) {
-    this.filter = operation;
+  /**
+   * Set this filter based on filter name parameter.
+   * @param name 
+   */
+  selectFilter(name: string) {
+    let newFilter = this.filterOptions.filter(option => option.name === name)[0];
+    this.filter = {...newFilter, "attribute": this.selectedAttribute};
+    this.setFilter();
   }
 }

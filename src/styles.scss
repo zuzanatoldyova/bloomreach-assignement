@@ -86,9 +86,10 @@ input.input {
   color: $blue;
 } 
 
-.remove {
+.icon {
   cursor: pointer;
   color: grey;
+  margin-right: 10px;
 
   &:hover {
     color: black;

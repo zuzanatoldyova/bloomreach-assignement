@@ -29,7 +29,6 @@ export class CustomerFilterComponent implements OnInit {
    * Add new event to the last index of selectedEvents.
    */
   addNewEvent() {
-    // const eventCopy = Object.assign({}, this.events[0].event);
     this.addEvent(this.events[0].event.eventName, this.selectedEvents.length);
   }
 
@@ -39,11 +38,23 @@ export class CustomerFilterComponent implements OnInit {
    * @param event 
    * @param index 
    */
-   addEvent(eventName: string, index: number) {
-    this.selectedEvents[index] = {eventName, idCounter: this.idCounter};
+  addEvent(eventName: string, index: number) {
+    let event = {eventName, idCounter: this.idCounter}
+    this.selectedEvents[index] = event;
     this.idCounter++;
-    let basicFilter = this.createBasicFilter(eventName);
+    let basicFilter = this.createBasicFilter(event.eventName);
     this.addFilter(basicFilter, index);
+  }
+
+  insertEvent(eventName: string, index: number, filter: EventAttributeFilter) {
+    let event = {eventName, idCounter: this.idCounter, filter}
+    this.selectedEvents.splice(index, 0, event);
+    this.filters.splice(index, 0, filter);
+    this.idCounter++;
+  }
+
+  copyEventFilter(eventName: string, i: number) {
+    this.insertEvent(eventName, i + 1, this.filters[i])
   }
 
   removeEvent(index: number) {
