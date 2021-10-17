@@ -1,15 +1,14 @@
 <div>
   <div>
     <span class="step">{{ order + 1 }}. step </span>
-    <span class="">{{ selectedEvent.eventName }}</span>
+    <span class="">{{ selectedEvent }}</span>
   </div>
   <div class="row">
     <select class="arrow" 
       name="events" 
-      [id]="selectedEvent.index" 
       [(ngModel)]="selectedEvent"
       (change)="select()">
-      <option *ngFor="let event of allEvents" [ngValue]="event">{{ event.eventName }}</option>
+      <option *ngFor="let eventName of allEventNames" [ngValue]="eventName">{{ eventName }}</option>
     </select>
     <button class="buttonLink" *ngIf="!showAttribute" (click)="showAttribute = true">Add event attribute</button>
     <select class="arrow"

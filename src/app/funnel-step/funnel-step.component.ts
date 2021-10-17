@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { EventType, EventAttribute } from '../data';
 import { Filter } from '../filter-type/filter-type.component'
 
@@ -15,8 +15,8 @@ export interface EventAttributeFilter {
   templateUrl: './funnel-step.component.html',
   styleUrls: ['./funnel-step.component.scss']
 })
-export class FunnelStepComponent implements OnInit {
-  @Input() selectedEvent!: EventType;
+export class FunnelStepComponent implements OnInit, OnChanges {
+  @Input() selectedEvent!: string;
   @Input() allEvents!: EventType[];
   @Input() order!: number;
   @Output() selected = new EventEmitter();
@@ -26,24 +26,34 @@ export class FunnelStepComponent implements OnInit {
   selectedEventKeys: string[] = [];
   selectedAttribute?: EventAttribute;
   filter?: EventAttributeFilter;
+  allEventNames?: string[]; 
 
   constructor() { }
   
   ngOnInit(): void {
-    this.getKeys(this.selectedEvent);
+    this.allEventNames = this.allEvents.map(event => event.eventName);
+    this.selectedEventKeys = this.getKeys(this.selectedEvent);
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    let newKeys = this.getKeys(this.selectedEvent);
+    if (this.selectedAttribute && !newKeys.includes(this.selectedAttribute)) {
+      this.selectedAttribute = undefined;
+    }
   }
 
   select() {
     this.selected.emit(this.selectedEvent);
-    this.getKeys(this.selectedEvent);
+    this.selectedEventKeys = this.getKeys(this.selectedEvent);
   }
 
   /**
    * Get event attributes which are the event object keys, except the eventName.
    * @param event 
    */
-  getKeys(event: EventType) {
-    this.selectedEventKeys = Object.keys(event).filter(key => key !== "eventName")
+  getKeys(eventName: string) {
+    const currentEvent = this.allEvents.filter(event => event.eventName === eventName)[0];
+    return Object.keys(currentEvent).filter(key => key !== "eventName")
   }
 
   addFilter(filter: Filter) {
@@ -57,7 +67,7 @@ export class FunnelStepComponent implements OnInit {
   createFilter(filter: Filter) {
     if (this.selectedAttribute) {
       this.filter = {...filter, 
-      'eventName': this.selectedEvent.eventName, 
+      'eventName': this.selectedEvent, 
       'attribute': this.selectedAttribute}
     this.filterAdded.emit(this.filter);
     }  

@@ -7,36 +7,40 @@ import { EventAttributeFilter } from '../funnel-step/funnel-step.component'
   styleUrls: ['./customer-filter.component.scss']
 })
 export class CustomerFilterComponent implements OnInit {
-  events = events;
-  distinctEvents: EventType[] = this.events.map(event => event.event).filter((event, index, self) => {
-    return self.findIndex(e => e.eventName === event.eventName) === index;
-  });
-  selectedEvents: EventType[] = [];
+  events: CustomEvent[] = events;
+  distinctEvents: EventType[] = this.events.map(event => event.event)
+  // Filter all events to only include one of each
+    .filter((event, index, self) => {
+      return self.findIndex(e => e.eventName === event.eventName) === index;
+    });
+  selectedEvents: string[] = [];
   filters: EventAttributeFilter[] = [];
   customerSessionEvents:CustomerSessionEvents[] = [];
 
   constructor() { }
 
   ngOnInit(): void {
-    this.addBasicEvent();
+    this.addNewEvent();
     this.groupCustomerSessionEvents(events);
   }
 
-  addBasicEvent() {
-    this.addEvent(this.events[0].event);
+  /**
+   * Add new event to the last index of selectedEvents.
+   */
+  addNewEvent() {
+    // const eventCopy = Object.assign({}, this.events[0].event);
+    this.addEvent(this.events[0].event.eventName, this.selectedEvents.length);
   }
 
-  onSelected(event: EventType, index: number) {
-    this.selectedEvents[index] = event;
-    let basicFilter = this.createBasicFilter(event.eventName);
-    this.addFilter(basicFilter, index);
-  }
-
-  addEvent(event: EventType) {
-    this.selectedEvents.push(event);
-    // create basic filter for new added event
-    const basicFilter = this.createBasicFilter(event.eventName);
-    const index = this.selectedEvents.length - 1;
+  /**
+   * Add event to specified index, 
+   * create basic filter and replace filter.
+   * @param event 
+   * @param index 
+   */
+   addEvent(eventName: string, index: number) {
+    this.selectedEvents[index] = eventName;
+    let basicFilter = this.createBasicFilter(eventName);
     this.addFilter(basicFilter, index);
   }
 
@@ -59,12 +63,21 @@ export class CustomerFilterComponent implements OnInit {
     }
   }
 
+  /**
+   * Filtering customer session events based on selected filters.
+   * @param events - customer session events
+   * @returns -true if for each filter customer has at least one matching event
+   * else false. 
+   */
   filterEvents(events: EventType[]) {
     let filtered = events;
+    // for each filter return count of events that satisfy the filter
     let foundEventCounts = this.filters.map(filter => {
       return filtered.filter(event => {
+        // filter by event name
         return event.eventName === filter.eventName
       }).filter(event => {
+        // filter by selected attribute
         if (filter.attribute) {
           let attrValue = filter.attribute && event[filter.attribute];
           let [x, y] = filter.value;
@@ -74,9 +87,14 @@ export class CustomerFilterComponent implements OnInit {
         return true;
       }).length;
     });
+    // return true if every filter matches at least one event in an array
     return foundEventCounts.every(count => count > 0);
   }
 
+  /**
+   * Group array of events based on customer id and session id.
+   * @param events - all events data
+   */
   groupCustomerSessionEvents(events: CustomEvent[]) {
     events.forEach(event => {
       const customerSession = this.customerSessionEvents
@@ -103,5 +121,10 @@ export class CustomerFilterComponent implements OnInit {
     });
 
     console.log(filteredCustomers);
+  }
+
+
+  trackByFn(index: number, el: any){
+    return index;
   }
 }
