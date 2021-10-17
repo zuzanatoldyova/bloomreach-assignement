@@ -73,8 +73,27 @@ input.input {
 }
 
 .buttonLink {
+  cursor: pointer;
   border:none;
   background-color:transparent;
   outline:none;
   color: $blue;
 } 
+
+.close {
+  position: relative;
+  cursor: pointer;
+
+  &:after {
+    font-size: 26px;
+    color: grey;
+    position: absolute;
+    top: -4px;
+    display: inline-block;
+    content: "\00d7"; /* This will render the 'X' */
+  }
+
+  &:hover {
+    font-weight: bold;
+  }
+}

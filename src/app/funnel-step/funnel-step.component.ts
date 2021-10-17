@@ -22,7 +22,7 @@ export class FunnelStepComponent implements OnInit, OnChanges {
   @Output() selected = new EventEmitter();
   @Output() filterAdded = new EventEmitter();
   
-  showAttribute: Boolean = false;
+  showFilter: Boolean = false;
   selectedEventKeys: string[] = [];
   selectedAttribute?: EventAttribute;
   filter?: EventAttributeFilter;
@@ -58,6 +58,18 @@ export class FunnelStepComponent implements OnInit, OnChanges {
 
   addFilter(filter: Filter) {
     this.createFilter(filter);
+  }
+
+  removeFilter() {
+    this.showFilter = false;
+    this.selectedAttribute = undefined;
+    this.filterAdded.emit({
+      'eventName': this.selectedEvent, 
+      'name': '',
+      'math': '',
+      'params': 0,
+      'value': []
+    });
   }
 
   /**
