@@ -63,6 +63,12 @@ input.input {
   margin: 1em 0;
 }
 
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .uppercase {
   text-transform: uppercase;
 }
@@ -80,6 +86,15 @@ input.input {
   color: $blue;
 } 
 
+.remove {
+  cursor: pointer;
+  color: grey;
+
+  &:hover {
+    color: black;
+  }
+}
+
 .close {
   position: relative;
   cursor: pointer;
@@ -93,7 +108,7 @@ input.input {
     content: "\00d7"; /* This will render the 'X' */
   }
 
-  &:hover {
-    font-weight: bold;
+  &:hover:after {
+    color: black;
   }
 }

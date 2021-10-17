@@ -13,9 +13,10 @@ export class CustomerFilterComponent implements OnInit {
     .filter((event, index, self) => {
       return self.findIndex(e => e.eventName === event.eventName) === index;
     });
-  selectedEvents: string[] = [];
+  selectedEvents: any[] = [];
   filters: EventAttributeFilter[] = [];
   customerSessionEvents:CustomerSessionEvents[] = [];
+  idCounter: number = 0;
 
   constructor() { }
 
@@ -39,9 +40,15 @@ export class CustomerFilterComponent implements OnInit {
    * @param index 
    */
    addEvent(eventName: string, index: number) {
-    this.selectedEvents[index] = eventName;
+    this.selectedEvents[index] = {eventName, idCounter: this.idCounter};
+    this.idCounter++;
     let basicFilter = this.createBasicFilter(eventName);
     this.addFilter(basicFilter, index);
+  }
+
+  removeEvent(index: number) {
+    this.selectedEvents.splice(index, 1);
+    this.filters.splice(index, 1);
   }
 
   addFilter(filter: EventAttributeFilter, index: number) {
@@ -125,6 +132,6 @@ export class CustomerFilterComponent implements OnInit {
 
 
   trackByFn(index: number, el: any){
-    return index;
+    return el.idCounter;
   }
 }

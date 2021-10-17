@@ -1,13 +1,16 @@
 <div style="padding: 20px;">
   <p class="uppercase">Customer filter</p>
   <div class="funnelContainer">
-    <app-funnel-step *ngFor="let event of selectedEvents; let i = index; trackBy: trackByFn" 
-        [id]="i"
-        [selectedEvent]="event" 
-        [allEvents]="distinctEvents" 
-        [order]="i"
-        (selected)="addEvent($event, i)"
-        (filterAdded)="addFilter($event, i)"></app-funnel-step>
+    <div *ngFor="let event of selectedEvents; let i = index; trackBy: trackByFn"
+      class="flex">
+      <app-funnel-step [id]="event.idCounter"
+          [selectedEvent]="event.eventName" 
+          [allEvents]="distinctEvents" 
+          [order]="i"
+          (selected)="addEvent($event, i)"
+          (filterAdded)="addFilter($event, i)"></app-funnel-step>
+      <i *ngIf="i > 0" class="remove far fa-trash-alt" (click)="removeEvent(i)"></i>
+    </div>
     <button class="uppercase center buttonLink" (click)="addNewEvent()">Add funnel step</button>
   </div>
   <button class="yellow" (click)="filterCustomers()">Apply filters</button>
